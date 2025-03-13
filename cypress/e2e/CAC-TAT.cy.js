@@ -49,7 +49,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#lastName').type('Silva')
     cy.get('#email').type('teste@teste.com')
 
-    cy.get('#phone-checkbox').click()
+    cy.get('#phone-checkbox').check()
 
     cy.contains('button', 'Enviar').click()
 
@@ -108,11 +108,25 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   })
 
   /* Verific dentro de uma lista */
-  it.only('marca cada tipo de atendimento', () =>{
+  it('marca cada tipo de atendimento', () =>{
     cy.get('input[type="radio"]').each(($radio) => {
       cy.wrap($radio).check().should('be.checked')
-    })
-        
+    })        
   })
 
+  it('marca ambos checkboxes, depois desmarca o último', () => {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck().should('not.be.checked')
+  })
+
+  it.only('seleciona um arquivo da pasta fixtures' , () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json')
+      .should(input => {
+        expect(input[0].files[0].name).to.eq('example.json')
+      })
+  })
 })
